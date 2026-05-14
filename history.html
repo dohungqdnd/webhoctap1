@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lịch sử học tập</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <img class="logo" src="assets/images/logo.jpg" alt="Logo" />
+    <div>
+      <h1 class="brand-title">Lịch sử học tập</h1>
+      <p class="brand-subtitle">Phụ huynh xem lại quá trình ôn luyện của con</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="practice-top">
+      <a class="back-link" href="index.html">← Về trang chọn bài</a>
+      <button class="btn secondary" id="clearHistoryBtn">Xóa lịch sử</button>
+    </div>
+
+    <section class="summary-grid" id="summaryGrid"></section>
+    <section class="history-list" id="historyList"></section>
+  </main>
+
+  <script src="js/storage.js"></script>
+  <script src="js/history.js"></script>
+</body>
+</html>

@@ -1,27 +1,31 @@
-# Web học toán cho bé
+# Web học toán cho bé - bản GitHub Pages
 
-Bản đã tái cấu trúc để đưa lên GitHub Pages/Netlify.
+Bản này đã được tái cấu trúc để chạy tĩnh trên GitHub Pages.
 
-## Cách chạy local
-Mở trực tiếp `index.html` bằng trình duyệt.
+## Chức năng chính
+- Một trang chọn bài: `index.html`
+- Một trang luyện tập chung: `practice.html`
+- Một trang lịch sử học tập: `history.html`
+- Có phép tính đơn lẻ: cộng, trừ, nhân, chia
+- Có phép tính tổng hợp: cộng + trừ, nhân + chia, + − × ÷
+- Mỗi lượt 10 câu
+- Lưu kết quả học vào localStorage trên trình duyệt
+- Lưu danh sách câu sai để phụ huynh xem lại
 
-## Cách upload GitHub Pages
-1. Tạo repository mới trên GitHub.
-2. Upload toàn bộ file/thư mục trong gói này lên repository.
-3. Vào Settings → Pages.
-4. Source: Deploy from a branch.
-5. Branch: main / root.
-6. Save và chờ GitHub tạo link.
+## Cách thêm bài mới
+Mở file:
 
-## Cấu trúc chính
-- `index.html`: trang chọn lớp/chủ đề.
-- `practice.html`: trang luyện tập chung.
-- `data/lessons.js`: danh mục bài học.
-- `js/app.js`: render danh sách bài học.
-- `js/practice.js`: sinh câu hỏi, chấm điểm, lưu câu sai.
-- `css/style.css`: toàn bộ giao diện.
-- `assets/audio`: âm thanh đúng/sai.
-- `assets/images`: logo.
+```text
+data/lessons.js
+```
 
-## Thêm bài học mới
-Mở `data/lessons.js` và thêm 1 object mới vào mảng `LESSONS`.
+Thêm một object mới vào mảng `LESSONS`.
+
+Ví dụ:
+
+```js
+{ id: "lop3-mixed-all", grade: 3, title: "Tổng hợp + − × ÷", type: "mixed_all", min: 0, max: 100, tables: [2,3,4,5,6,7,8,9], total: 10, level: 3 }
+```
+
+## Upload GitHub Pages
+Upload toàn bộ file/thư mục trong project này lên repository GitHub, sau đó bật Pages ở Settings → Pages → Deploy from branch → main → /root.
