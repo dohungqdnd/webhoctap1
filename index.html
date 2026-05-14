@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Web học toán cho bé</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <img class="logo" src="assets/images/logo.jpg" alt="Logo" />
+    <div>
+      <h1 class="brand-title">Web học toán cho bé</h1>
+      <p class="brand-subtitle">Luyện nhanh – dễ bấm – có ôn lại câu sai</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <h2>Chọn bài học cho con</h2>
+        <p>Mỗi lượt gồm 10 câu. Sau khi làm xong, hệ thống sẽ lưu các câu sai để con ôn lại ngay.</p>
+        <div class="tip-box">Gợi ý: Với bé lớp 2–3, nên học ngắn 5–10 phút/lượt, ưu tiên làm lại câu sai thay vì làm quá nhiều câu mới.</div>
+      </div>
+      <div class="tip-box">
+        <strong>Điểm đã tối ưu:</strong><br />
+        1 giao diện chung, 1 bộ JS/CSS chung, không copy lặp từng folder bài học.
+      </div>
+    </section>
+
+    <div class="grade-tabs" id="gradeTabs"></div>
+    <section class="lesson-grid" id="lessonGrid"></section>
+  </main>
+
+  <p class="footer-note">Có thể upload nguyên thư mục này lên GitHub Pages/Netlify là chạy.</p>
+  <script src="data/lessons.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

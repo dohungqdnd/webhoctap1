@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Luyện tập</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <img class="logo" src="assets/images/logo.jpg" alt="Logo" />
+    <div>
+      <h1 class="brand-title">Luyện tập</h1>
+      <p class="brand-subtitle" id="lessonSubtitle">Mỗi lượt 10 câu</p>
+    </div>
+  </header>
+
+  <main class="practice-shell">
+    <div class="practice-top">
+      <a class="back-link" href="index.html">← Về trang chọn bài</a>
+      <div class="status">
+        <span class="pill">Câu <span id="currentNo">1</span>/<span id="totalNo">10</span></span>
+        <span class="pill">Đúng: <span id="rightCount">0</span></span>
+        <span class="pill">Sai: <span id="wrongCount">0</span></span>
+      </div>
+    </div>
+
+    <section class="question-card" id="questionCard">
+      <h2 class="lesson-heading" id="lessonTitle">Bài học</h2>
+      <div class="expression" id="expression">0 + 0 = ?</div>
+      <div class="answer-grid" id="answerGrid"></div>
+      <div class="feedback" id="feedback"></div>
+      <div class="controls">
+        <button class="btn secondary" id="hintBtn">Gợi ý / Xem đáp án</button>
+        <button class="btn secondary" id="resetBtn">Làm lại từ đầu</button>
+      </div>
+    </section>
+
+    <section class="review-card hidden" id="reviewCard"></section>
+  </main>
+
+  <audio id="audioDung" src="assets/audio/dung.mp3" preload="auto"></audio>
+  <audio id="audioSai" src="assets/audio/sai.mp3" preload="auto"></audio>
+  <script src="data/lessons.js"></script>
+  <script src="js/practice.js"></script>
+</body>
+</html>
