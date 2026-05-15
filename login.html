@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Đăng nhập học tập</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <img class="logo" src="assets/images/logo.jpg" alt="Logo" />
+    <div>
+      <h1 class="brand-title">Đăng nhập học tập</h1>
+      <p class="brand-subtitle">Con và phụ huynh dùng chung một tài khoản</p>
+    </div>
+  </header>
+
+  <main class="login-shell">
+    <section class="login-card">
+      <h2>Đăng nhập tài khoản của con</h2>
+      <p class="login-note">Phụ huynh có thể đăng nhập cùng tài khoản này trên điện thoại/máy tính khác để xem lịch sử học từ xa.</p>
+
+      <label for="email">Email</label>
+      <input id="email" class="text-input" type="email" placeholder="vd: con@example.com" autocomplete="email" />
+
+      <label for="password">Mật khẩu</label>
+      <input id="password" class="text-input" type="password" placeholder="Tối thiểu 6 ký tự" autocomplete="current-password" />
+
+      <div class="controls login-controls">
+        <button class="btn" id="loginBtn">Đăng nhập</button>
+        <button class="btn secondary" id="registerBtn">Tạo tài khoản</button>
+      </div>
+
+      <p id="message" class="login-message"></p>
+    </section>
+  </main>
+
+  <script type="module" src="js/login.js"></script>
+</body>
+</html>

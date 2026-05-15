@@ -1,3 +1,5 @@
+import { saveSessionOnline } from './firebase-service.js';
+
 (function(){
   const params = new URLSearchParams(location.search);
   const lessonId = params.get('lesson') || 'lop1-tru20';
@@ -107,8 +109,8 @@
     el.feedback.classList.remove('bad');
   }
 
-  function finishSession(){
-    StudyStorage.saveSession({
+  async function finishSession(){
+    const sessionData = {
       lessonId: lesson.id,
       lessonTitle: lesson.title,
       grade: lesson.grade,
@@ -120,15 +122,32 @@
       startedAt: state.startedAt,
       finishedAt: new Date().toISOString(),
       wrongList: state.wrongList
+    };
+
+    // Vẫn lưu localStorage dự phòng để không mất kết quả nếu mạng yếu/Firebase lỗi.
+    StudyStorage.saveSession({
+      ...sessionData,
+      saveMode: 'local-backup'
     });
+
+    try {
+      await saveSessionOnline(sessionData);
+      state.saveMessage = 'Kết quả đã lưu online vào Firebase. Phụ huynh có thể xem từ xa bằng cùng tài khoản đăng nhập.';
+    } catch (error) {
+      state.saveMessage = 'Firebase chưa lưu được. Kết quả đã lưu tạm trên máy này. Lỗi: ' + error.message;
+    }
+
     localStorage.removeItem(key);
   }
 
-  function showReview(){
+  async function showReview(){
     if(!state.saved){
-      finishSession();
       state.saved = true;
       saveState();
+      el.questionCard.classList.add('hidden');
+      el.reviewCard.classList.remove('hidden');
+      el.reviewCard.innerHTML = `<h2>Đang lưu kết quả...</h2><p style="text-align:center">Hệ thống đang lưu kết quả học của con.</p>`;
+      await finishSession();
     }
 
     el.questionCard.classList.add('hidden');
@@ -140,6 +159,7 @@
 
     el.reviewCard.innerHTML = `
       <h2>Kết quả lượt học</h2>
+      <p class="save-message">${state.saveMessage || ''}</p>
       <p style="text-align:center;font-size:22px">Con làm đúng <strong>${state.right}/${total}</strong> câu (${percent}%).</p>
       ${wrongHtml}
       <div class="controls">

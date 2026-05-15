@@ -79,3 +79,19 @@ body{
 /* Bổ sung cho bản nâng cấp: bài tổng hợp + lịch sử học */
 a.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}.lesson-card.level-2{border-color:#bfead0}.lesson-card.level-3{border-color:#ffd59e}.summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin:18px 0}.summary-card{background:#fff;border:2px solid #d7eef8;border-radius:22px;padding:18px;text-align:center;box-shadow:0 6px 18px rgba(0,76,115,.07)}.summary-card.wide{grid-column:auto}.summary-number{font-size:34px;font-weight:900;color:var(--primary-dark)}.summary-number.small{font-size:20px;line-height:1.35}.summary-label{font-size:15px;color:#607887;margin-top:6px}.history-list{display:grid;gap:14px;margin-top:16px}.history-card{background:#fff;border:2px solid #e2f2fa;border-radius:22px;padding:18px;box-shadow:0 6px 18px rgba(0,76,115,.07)}.history-head{display:flex;justify-content:space-between;gap:12px;align-items:center}.history-head h3{margin:0;color:var(--primary-dark);font-size:22px}.history-head p{margin:5px 0 0;color:#607887}.score-badge{min-width:82px;text-align:center;background:var(--soft);border:2px solid #ccecf8;border-radius:18px;padding:10px;font-size:24px;font-weight:900;color:var(--primary-dark)}.score-badge span{font-size:15px}.good-text{color:var(--good);font-weight:800}.review-list.compact{font-size:17px;line-height:1.55}details{background:#f8fcff;border-radius:16px;padding:12px;margin-top:8px}summary{cursor:pointer;font-weight:800;color:var(--primary-dark)}
 @media(max-width:640px){.history-head{align-items:flex-start}.score-badge{min-width:72px;font-size:20px}.summary-number{font-size:28px}}
+
+
+/* Firebase login/account */
+.user-bar{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.user-email{font-size:14px;color:#527083;background:#f4fbff;border:1px solid #d7eef8;border-radius:999px;padding:8px 10px;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.small-btn{font-size:14px;min-height:38px;padding:8px 12px}
+.login-shell{max-width:560px;margin:0 auto;padding:22px}
+.login-card{background:#fff;border-radius:26px;padding:24px;box-shadow:0 8px 28px rgba(0,76,115,.09);border:2px solid #e2f2fa}
+.login-card h2{margin:0 0 8px;text-align:center;color:var(--primary-dark);font-size:28px}
+.login-note{font-size:16px;line-height:1.5;text-align:center;color:#527083;margin-bottom:18px}
+.login-card label{display:block;margin:12px 0 6px;font-weight:800;color:var(--primary-dark)}
+.text-input{width:100%;min-height:54px;border:2px solid #ccecf8;border-radius:16px;padding:0 14px;font-size:18px;outline:none;background:#f8fcff}
+.text-input:focus{border-color:var(--primary);background:#fff}
+.login-controls{margin-top:18px}.login-message{min-height:24px;text-align:center;color:var(--bad);font-weight:700;line-height:1.45}.save-message{text-align:center;background:#f4fbff;border:2px solid #d7eef8;border-radius:16px;padding:10px 12px;color:var(--primary-dark);font-weight:800}
+button:disabled{opacity:.65;cursor:not-allowed}
+@media(max-width:640px){.app-header{align-items:flex-start}.user-bar{width:100%;justify-content:flex-start}.user-email{max-width:100%;font-size:13px}.login-shell{padding:12px}.login-card{padding:18px}.login-card h2{font-size:24px}}

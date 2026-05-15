@@ -18,14 +18,14 @@
   <main class="container">
     <div class="practice-top">
       <a class="back-link" href="index.html">← Về trang chọn bài</a>
-      <button class="btn secondary" id="clearHistoryBtn">Xóa lịch sử</button>
+      <span class="pill">Lịch sử online theo tài khoản đang đăng nhập</span>
     </div>
 
     <section class="summary-grid" id="summaryGrid"></section>
     <section class="history-list" id="historyList"></section>
   </main>
 
-  <script src="js/storage.js"></script>
-  <script src="js/history.js"></script>
+  <script type="module" src="js/auth-guard.js"></script>
+  <script type="module" src="js/history-online.js"></script>
 </body>
 </html>
