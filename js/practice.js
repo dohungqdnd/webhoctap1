@@ -124,17 +124,23 @@ import { saveSessionOnline } from './firebase-service.js';
       wrongList: state.wrongList
     };
 
-    // Vẫn lưu localStorage dự phòng để không mất kết quả nếu mạng yếu/Firebase lỗi.
-    StudyStorage.saveSession({
-      ...sessionData,
-      saveMode: 'local-backup'
-    });
-
     try {
-      await saveSessionOnline(sessionData);
-      state.saveMessage = 'Kết quả đã lưu online vào Firebase. Phụ huynh có thể xem từ xa bằng cùng tài khoản đăng nhập.';
+      const onlineId = await saveSessionOnline(sessionData);
+      state.saveMessage = '✅ Kết quả đã lưu ONLINE vào Firebase. Phụ huynh đăng nhập cùng tài khoản ở máy khác sẽ xem được lịch sử.';
+      // Chỉ lưu một bản đánh dấu dự phòng sau khi đã lưu online thành công, không dùng để hiển thị lịch sử chính.
+      StudyStorage.saveSession({
+        ...sessionData,
+        onlineId,
+        saveMode: 'online-backup'
+      });
     } catch (error) {
-      state.saveMessage = 'Firebase chưa lưu được. Kết quả đã lưu tạm trên máy này. Lỗi: ' + error.message;
+      StudyStorage.saveSession({
+        ...sessionData,
+        saveMode: 'local-fallback',
+        firebaseError: error.message
+      });
+      state.saveMessage = '⚠️ Firebase CHƯA lưu được. Kết quả chỉ đang lưu tạm trên máy này nên sang trình duyệt khác sẽ không thấy. Lỗi: ' + error.message;
+      console.error('Firebase save failed:', error);
     }
 
     localStorage.removeItem(key);

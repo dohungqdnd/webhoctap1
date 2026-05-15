@@ -11,6 +11,8 @@ const passwordInput = document.getElementById("password");
 const loginBtn = document.getElementById("loginBtn");
 const registerBtn = document.getElementById("registerBtn");
 const message = document.getElementById("message");
+const params = new URLSearchParams(window.location.search);
+const redirectTarget = params.get("redirect") || "index.html";
 
 function setBusy(isBusy) {
   loginBtn.disabled = isBusy;
@@ -35,7 +37,7 @@ function getInput() {
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    window.location.href = "index.html";
+    window.location.replace(redirectTarget);
   }
 });
 
@@ -45,7 +47,7 @@ loginBtn.addEventListener("click", async () => {
     message.textContent = "";
     const { email, password } = getInput();
     await signInWithEmailAndPassword(auth, email, password);
-    window.location.href = "index.html";
+    window.location.replace(redirectTarget);
   } catch (error) {
     message.textContent = "Đăng nhập chưa thành công: " + error.message;
   } finally {
@@ -68,7 +70,7 @@ registerBtn.addEventListener("click", async () => {
       createdAt: serverTimestamp()
     }, { merge: true });
 
-    window.location.href = "index.html";
+    window.location.replace(redirectTarget);
   } catch (error) {
     message.textContent = "Tạo tài khoản chưa thành công: " + error.message;
   } finally {

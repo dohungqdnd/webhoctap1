@@ -4,11 +4,6 @@ import { loadSessionsOnline } from "./firebase-service.js";
 
 const summaryGrid = document.getElementById("summaryGrid");
 const historyList = document.getElementById("historyList");
-const clearBtn = document.getElementById("clearHistoryBtn");
-
-if (clearBtn) {
-  clearBtn.style.display = "none";
-}
 
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
@@ -32,7 +27,7 @@ function renderLoading() {
   historyList.innerHTML = `
     <div class="review-card">
       <h2>Đang tải lịch sử học...</h2>
-      <p style="text-align:center">Hệ thống đang lấy dữ liệu từ Firebase.</p>
+      <p style="text-align:center">Trang này chỉ đọc dữ liệu ONLINE từ Firebase, không lấy lịch sử localStorage của trình duyệt.</p>
     </div>
   `;
 }
@@ -67,7 +62,7 @@ function renderHistory(sessions) {
     historyList.innerHTML = `
       <div class="review-card">
         <h2>Chưa có lịch sử học tập</h2>
-        <p style="text-align:center">Con làm xong một lượt 10 câu thì kết quả sẽ tự lưu ở đây.</p>
+        <p style="text-align:center">Con làm xong một lượt 10 câu thì kết quả phải xuất hiện ở đây nếu Firestore đã ghi thành công.</p>
       </div>
     `;
     return;
@@ -101,7 +96,7 @@ function renderError(error) {
     <div class="review-card">
       <h2>Chưa tải được lịch sử online</h2>
       <p style="text-align:center;color:#c83911">${escapeHtml(error.message || "Lỗi không xác định")}</p>
-      <p style="text-align:center">Bạn kiểm tra lại Firebase config, Firestore Rules và Authorized domain.</p>
+      <p style="text-align:center">Bạn kiểm tra lại firebase-config.js, Firestore Rules, Firestore Database đã được tạo chưa, và mở Console xem lỗi cụ thể.</p>
     </div>
   `;
 }

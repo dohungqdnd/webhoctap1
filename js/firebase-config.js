@@ -10,15 +10,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/fireba
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyCZ-5d9mhap7iytR85B0LIQCL1f_W_UA8U",
-  authDomain: "webhoctap-f367d.firebaseapp.com",
-  projectId: "webhoctap-f367d",
-  storageBucket: "webhoctap-f367d.firebasestorage.app",
-  messagingSenderId: "244556851807",
-  appId: "1:244556851807:web:f15dba7be799690c3989ea",
-  measurementId: "G-W6CHZH0E06"
+export const firebaseConfig = {
+  apiKey: "DAN_API_KEY_CUA_BAN",
+  authDomain: "TEN_PROJECT.firebaseapp.com",
+  projectId: "TEN_PROJECT",
+  storageBucket: "TEN_PROJECT.appspot.com",
+  messagingSenderId: "DAN_MESSAGING_ID",
+  appId: "DAN_APP_ID"
 };
 
 const app = initializeApp(firebaseConfig);
