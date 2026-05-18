@@ -12,32 +12,72 @@
     <img class="logo" src="assets/images/logo.jpg" alt="Logo" />
     <div>
       <h1 class="brand-title">Web học toán cho bé</h1>
-      <p class="brand-subtitle">Luyện nhanh – dễ bấm – có ôn lại câu sai</p>
+      <p class="brand-subtitle">Chọn lớp → chọn chủ đề → chọn mức độ → bắt đầu học</p>
     </div>
   </header>
 
-  <main class="container">
-    <section class="hero">
+  <main class="container home-container">
+    <section class="hero home-hero">
       <div>
-        <h2>Chọn bài học cho con</h2>
-        <p>Mỗi lượt gồm 10 câu. Sau khi làm xong, hệ thống sẽ lưu kết quả vào lịch sử để phụ huynh xem lại.</p>
-        <div class="tip-box">Gợi ý: Với bé lớp 2–3, nên bắt đầu bằng phép đơn lẻ, sau đó chuyển sang bài tổng hợp cộng/trừ, nhân/chia và cuối cùng mới luyện tổng hợp + − × ÷.</div>
+        <h2>Hôm nay con học bài nào?</h2>
+        <p>Chọn theo từng bước. Nút to, dễ bấm, phù hợp cho bé lớp 2–3 và sẵn sàng mở rộng lớp 4–5.</p>
       </div>
-      <div class="tip-box">
-        <strong>Đã nâng cấp:</strong><br />
-        Có bài tổng hợp đan xen phép tính và lịch sử học tập lưu online bằng Firebase.
-        <div style="margin-top:12px"><a class="btn" href="history.html">Xem lịch sử học</a></div>
+      <div class="home-actions">
+        <a class="btn secondary" href="history.html">Xem lịch sử học tập</a>
       </div>
     </section>
 
-    <div class="grade-tabs" id="gradeTabs"></div>
-    <section class="lesson-grid" id="lessonGrid"></section>
+    <section class="learning-flow" aria-label="Chọn bài học">
+      <div class="step-card" id="stepGrade">
+        <div class="step-head">
+          <span class="step-number">1</span>
+          <div>
+            <h3>Chọn lớp</h3>
+            <p>Bé đang học lớp mấy?</p>
+          </div>
+        </div>
+        <div class="choice-grid grade-grid" id="gradeList"></div>
+      </div>
+
+      <div class="step-card" id="stepTopic">
+        <div class="step-head">
+          <span class="step-number">2</span>
+          <div>
+            <h3>Chọn chủ đề</h3>
+            <p>Chọn nhóm bài muốn luyện.</p>
+          </div>
+        </div>
+        <div class="choice-grid topic-grid" id="topicList"></div>
+      </div>
+
+      <div class="step-card" id="stepLevel">
+        <div class="step-head">
+          <span class="step-number">3</span>
+          <div>
+            <h3>Chọn mức độ</h3>
+            <p>Bắt đầu từ Dễ rồi tăng dần.</p>
+          </div>
+        </div>
+        <div class="choice-grid level-grid" id="levelList"></div>
+      </div>
+
+      <div class="step-card" id="stepLesson">
+        <div class="step-head">
+          <span class="step-number">4</span>
+          <div>
+            <h3>Bắt đầu học</h3>
+            <p>Chọn bài phù hợp rồi vào luyện tập.</p>
+          </div>
+        </div>
+        <div class="lesson-select-list" id="lessonList"></div>
+      </div>
+    </section>
   </main>
 
   <p class="footer-note">Có thể upload nguyên thư mục này lên GitHub Pages/Netlify là chạy.</p>
   <script src="data/grades.js"></script>
   <script src="data/lessons.js"></script>
-  <script src="js/app.js?v=20260518-module"></script>
+  <script src="js/app.js?v=20260518-homeflow"></script>
   <script type="module" src="js/auth-guard.js?v=20260515b"></script>
 </body>
 </html>

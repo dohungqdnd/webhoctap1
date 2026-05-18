@@ -95,3 +95,41 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 .login-controls{margin-top:18px}.login-message{min-height:24px;text-align:center;color:var(--bad);font-weight:700;line-height:1.45}.save-message{text-align:center;background:#f4fbff;border:2px solid #d7eef8;border-radius:16px;padding:10px 12px;color:var(--primary-dark);font-weight:800}
 button:disabled{opacity:.65;cursor:not-allowed}
 @media(max-width:640px){.app-header{align-items:flex-start}.user-bar{width:100%;justify-content:flex-start}.user-email{max-width:100%;font-size:13px}.login-shell{padding:12px}.login-card{padding:18px}.login-card h2{font-size:24px}}
+
+/* Trang chủ dạng app: chọn lớp → chủ đề → mức độ → bắt đầu */
+.home-container{max-width:1080px}
+.home-hero{grid-template-columns:1.25fr .75fr}
+.home-actions{display:flex;justify-content:flex-end;align-items:center;gap:10px;flex-wrap:wrap}
+.learning-flow{display:grid;gap:16px;margin-top:18px}
+.step-card{background:#fff;border:2px solid #e2f2fa;border-radius:24px;padding:18px;box-shadow:0 6px 18px rgba(0,76,115,.07)}
+.step-card.disabled{opacity:.72}
+.step-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.step-number{width:42px;height:42px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:var(--primary);color:#fff;font-size:22px;font-weight:900;box-shadow:0 5px 14px rgba(0,119,182,.22);flex:0 0 auto}
+.step-head h3{margin:0;color:var(--primary-dark);font-size:24px}
+.step-head p{margin:3px 0 0;color:#607887;font-size:15px}
+.choice-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.grade-grid{grid-template-columns:repeat(auto-fit,minmax(145px,1fr))}
+.topic-grid{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.level-grid{grid-template-columns:repeat(auto-fit,minmax(165px,1fr))}
+.grade-card,.topic-card,.level-card{border:3px solid #d7eef8;background:#f8fcff;color:var(--text);border-radius:22px;min-height:92px;padding:16px;cursor:pointer;text-align:left;display:flex;flex-direction:column;justify-content:center;gap:7px;transition:.15s transform,.15s border-color,.15s background,.15s box-shadow;font-family:inherit}
+.grade-card:hover,.topic-card:hover,.level-card:hover{transform:translateY(-2px);border-color:var(--primary);background:#fff;box-shadow:0 6px 18px rgba(0,76,115,.09)}
+.grade-card.active,.topic-card.active,.level-card.active{border-color:var(--primary-dark);background:var(--soft);box-shadow:0 8px 22px rgba(0,76,115,.13)}
+.grade-card.muted{background:#fbfdff;color:#607887}
+.card-title{font-size:24px;font-weight:900;color:var(--primary-dark);line-height:1.15}
+.card-subtitle{font-size:15px;color:#607887;line-height:1.35}
+.level-badge{display:inline-flex;align-items:center;justify-content:center;width:max-content;border-radius:999px;padding:8px 13px;font-size:20px;font-weight:900;color:var(--primary-dark);background:#eaf7ff;border:2px solid #ccecf8}
+.level-card.level-easy .level-badge{background:#e9fff0;border-color:#bfead0;color:#116b34}
+.level-card.level-medium .level-badge{background:#fff7df;border-color:#ffe19a;color:#7a5600}
+.level-card.level-hard .level-badge{background:#fff1ed;border-color:#ffc7b8;color:#9d2c10}
+.level-card.level-challenge .level-badge{background:#f2efff;border-color:#d5cbff;color:#4a3192}
+.lesson-select-list{display:grid;gap:12px}
+.lesson-pick-card{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:0;border-width:3px}
+.lesson-pick-card .lesson-main{min-width:0}
+.start-btn{white-space:nowrap;font-weight:900}
+.empty-state{background:#f8fcff;border:2px dashed #ccecf8;border-radius:18px;padding:16px;color:#607887;font-size:17px;line-height:1.45}
+.empty-state strong{display:block;color:var(--primary-dark);font-size:19px;margin-bottom:3px}
+.empty-state span{display:block}
+@media(max-width:640px){
+  .home-hero{grid-template-columns:1fr}.home-actions{justify-content:flex-start}.step-card{padding:14px;border-radius:20px}.step-head h3{font-size:21px}.choice-grid,.grade-grid,.topic-grid,.level-grid{grid-template-columns:1fr 1fr;gap:10px}.grade-card,.topic-card,.level-card{min-height:84px;padding:13px;border-radius:18px}.card-title{font-size:21px}.level-badge{font-size:18px}.lesson-pick-card{align-items:stretch;flex-direction:column}.start-btn{width:100%}
+}
+@media(max-width:420px){.choice-grid,.grade-grid,.topic-grid,.level-grid{grid-template-columns:1fr}}
