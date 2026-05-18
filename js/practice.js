@@ -1,11 +1,15 @@
 import { saveSessionOnline } from './firebase-service.js';
+import { createNumberOptions } from './core/answer-options.js';
+import { generateQuestion } from './core/question-router.js';
+import { buildSessionResult, createDefaultPracticeState, percent } from './core/score.js';
 
 (function(){
   const params = new URLSearchParams(location.search);
-  const lessonId = params.get('lesson') || 'lop1-tru20';
-  const lesson = LESSONS.find(l => l.id === lessonId) || LESSONS[0];
+  const lessons = window.LESSONS || [];
+  const lessonId = params.get('lesson') || (lessons[0] && lessons[0].id);
+  const lesson = lessons.find(l => l.id === lessonId) || lessons[0];
   const key = 'study_' + lesson.id;
-  const total = lesson.total || 10;
+  const total = Number(lesson.totalQuestions || lesson.total || 10);
 
   const el = {
     subtitle: document.getElementById('lessonSubtitle'),
@@ -29,7 +33,7 @@ import { saveSessionOnline } from './firebase-service.js';
   let currentQuestion = null;
   let answered = false;
 
-  function defaultState(){ return { current:1, right:0, wrong:0, wrongList:[], startedAt:new Date().toISOString() }; }
+  function defaultState(){ return createDefaultPracticeState(); }
   function loadState(){
     try { return JSON.parse(localStorage.getItem(key)) || defaultState(); }
     catch(e){ return defaultState(); }
@@ -47,15 +51,28 @@ import { saveSessionOnline } from './firebase-service.js';
   function startQuestion(){
     if(state.current > total){ showReview(); return; }
     answered = false;
-    currentQuestion = QuestionGenerator.generateQuestion(lesson);
+    try {
+      currentQuestion = generateQuestion(lesson);
+    } catch (error) {
+      el.questionCard.classList.add('hidden');
+      el.reviewCard.classList.remove('hidden');
+      el.reviewCard.innerHTML = `<h2>Chưa sinh được câu hỏi</h2><p style="text-align:center;color:#c83911">${escapeHtml(error.message)}</p>`;
+      return;
+    }
+
     el.subtitle.textContent = `${lesson.title} · ${total} câu/lượt`;
     el.title.textContent = lesson.title;
-    el.expression.textContent = currentQuestion.text + ' = ?';
+    el.expression.textContent = currentQuestion.questionText.includes('=') ? currentQuestion.questionText : currentQuestion.questionText + ' = ?';
     el.feedback.textContent = '';
     el.feedback.classList.remove('bad');
     el.grid.innerHTML = '';
 
-    QuestionGenerator.makeChoices(currentQuestion.answer).forEach(value => {
+    const options = createNumberOptions(currentQuestion.answer, {
+      count: 4,
+      allowNegative: Boolean(lesson.config && lesson.config.allowNegative)
+    });
+
+    options.forEach(value => {
       const btn = document.createElement('button');
       btn.className = 'answer-btn';
       btn.textContent = value;
@@ -71,7 +88,7 @@ import { saveSessionOnline } from './firebase-service.js';
   function chooseAnswer(value, btn){
     if(answered) return;
     answered = true;
-    const isCorrect = Number(value) === currentQuestion.answer;
+    const isCorrect = Number(value) === Number(currentQuestion.answer);
     if(isCorrect){
       state.right++;
       btn.classList.add('correct');
@@ -84,13 +101,16 @@ import { saveSessionOnline } from './firebase-service.js';
       el.feedback.textContent = 'Chưa đúng rồi, con xem lại nhé!';
       el.feedback.classList.add('bad');
       state.wrongList.push({
-        text: currentQuestion.text,
-        correct: currentQuestion.answer,
+        text: currentQuestion.questionText,
+        correct: Number(currentQuestion.answer),
         choose: Number(value),
-        skill: currentQuestion.skill || lesson.title
+        type: currentQuestion.type,
+        topic: currentQuestion.topic || lesson.topic,
+        skill: currentQuestion.skill || lesson.skill || lesson.title,
+        explanation: currentQuestion.explanation || ''
       });
       [...el.grid.children].forEach(child => {
-        if(Number(child.textContent) === currentQuestion.answer) child.classList.add('correct');
+        if(Number(child.textContent) === Number(currentQuestion.answer)) child.classList.add('correct');
       });
       play(el.audioSai);
     }
@@ -105,29 +125,16 @@ import { saveSessionOnline } from './firebase-service.js';
 
   function showHint(){
     if(!currentQuestion || answered) return;
-    el.feedback.textContent = 'Gợi ý: Đáp án đúng là ' + currentQuestion.answer;
+    el.feedback.textContent = currentQuestion.explanation || ('Gợi ý: Đáp án đúng là ' + currentQuestion.answer);
     el.feedback.classList.remove('bad');
   }
 
   async function finishSession(){
-    const sessionData = {
-      lessonId: lesson.id,
-      lessonTitle: lesson.title,
-      grade: lesson.grade,
-      level: lesson.level || 1,
-      correct: state.right,
-      wrong: state.wrong,
-      total: total,
-      percent: StudyStorage.percent(state.right, total),
-      startedAt: state.startedAt,
-      finishedAt: new Date().toISOString(),
-      wrongList: state.wrongList
-    };
+    const sessionData = buildSessionResult({ lesson, state });
 
     try {
       const onlineId = await saveSessionOnline(sessionData);
       state.saveMessage = '✅ Kết quả đã lưu ONLINE vào Firebase. Phụ huynh đăng nhập cùng tài khoản ở máy khác sẽ xem được lịch sử.';
-      // Chỉ lưu một bản đánh dấu dự phòng sau khi đã lưu online thành công, không dùng để hiển thị lịch sử chính.
       StudyStorage.saveSession({
         ...sessionData,
         onlineId,
@@ -158,15 +165,15 @@ import { saveSessionOnline } from './firebase-service.js';
 
     el.questionCard.classList.add('hidden');
     el.reviewCard.classList.remove('hidden');
-    const percent = StudyStorage.percent(state.right, total);
+    const resultPercent = percent(state.right, total);
     const wrongHtml = state.wrongList.length
-      ? `<p>Các câu con cần ôn lại:</p><ol class="review-list">${state.wrongList.map(item => `<li>${item.text} = <strong>${item.correct}</strong> <span style="color:#c83911">(con chọn ${item.choose})</span></li>`).join('')}</ol>`
+      ? `<p>Các câu con cần ôn lại:</p><ol class="review-list">${state.wrongList.map(item => `<li>${escapeHtml(item.text)} = <strong>${escapeHtml(String(item.correct))}</strong> <span style="color:#c83911">(con chọn ${escapeHtml(String(item.choose))})</span></li>`).join('')}</ol>`
       : `<p style="text-align:center;font-size:22px;color:#12823b"><strong>Xuất sắc! Con không sai câu nào.</strong></p>`;
 
     el.reviewCard.innerHTML = `
       <h2>Kết quả lượt học</h2>
-      <p class="save-message">${state.saveMessage || ''}</p>
-      <p style="text-align:center;font-size:22px">Con làm đúng <strong>${state.right}/${total}</strong> câu (${percent}%).</p>
+      <p class="save-message">${escapeHtml(state.saveMessage || '')}</p>
+      <p style="text-align:center;font-size:22px">Con làm đúng <strong>${state.right}/${total}</strong> câu (${resultPercent}%).</p>
       ${wrongHtml}
       <div class="controls">
         <button class="btn" id="newRoundBtn">Làm lượt mới</button>
@@ -174,6 +181,15 @@ import { saveSessionOnline } from './firebase-service.js';
       </div>`;
     document.getElementById('newRoundBtn').onclick = reset;
     document.getElementById('historyBtn').onclick = () => { location.href = 'history.html'; };
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? '')
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#039;');
   }
 
   el.hintBtn.onclick = showHint;
