@@ -1,225 +1,101 @@
-# CHANGELOG - Tái cấu trúc kiến trúc module
+# CHANGELOG
 
-## 2026-05-18
+## Giai đoạn 3 – Thêm chức năng “Ôn câu sai”
 
-### 1. Đã đổi cấu trúc gì
+### Đã nâng cấp chức năng gì?
+- Sau mỗi lượt học thường, hệ thống lưu đầy đủ danh sách câu sai vào `wrongQuestions`.
+- Nếu lượt học có câu sai, màn hình kết quả hiển thị nút **“Ôn lại câu sai”**.
+- Khi bấm nút này, `practice.html?review=last` sẽ mở chế độ ôn lại đúng các câu sai của lượt vừa học.
+- Trong chế độ ôn câu sai:
+  - Không sinh câu hỏi mới.
+  - Chỉ dùng lại các câu bé đã sai.
+  - Vẫn tạo đáp án nhiễu bằng `createNumberOptions()`.
+  - Vẫn có âm thanh đúng/sai.
+  - Vẫn đếm số câu, số đúng, số sai.
+  - Nếu bé sửa đúng, hiển thị: **“Tốt lắm, con đã sửa được câu này!”**
+  - Nếu vẫn sai, hiển thị đáp án đúng và giải thích nếu có.
+- Trang chủ có nút **“Ôn câu sai gần nhất”** nếu localStorage còn dữ liệu câu sai gần nhất.
+- Trang lịch sử online có nút **“Ôn lại câu sai của lượt này”** với các session có câu sai.
 
-Đã tách phần sinh câu hỏi khỏi `practice.js` và khỏi file gộp cũ `js/generator.js`.
-
-Cấu trúc mới chính:
-
-```text
-webhoctap1/
-├─ data/
-│  ├─ grades.js
-│  └─ lessons.js
-├─ js/
-│  ├─ app.js
-│  ├─ practice.js
-│  ├─ storage.js
-│  ├─ firebase-config.js
-│  ├─ login.js
-│  ├─ auth-guard.js
-│  ├─ history-online.js
-│  ├─ firebase-service.js
-│  ├─ core/
-│  │  ├─ random.js
-│  │  ├─ answer-options.js
-│  │  ├─ question-router.js
-│  │  └─ score.js
-│  └─ generators/
-│     ├─ add-sub.js
-│     ├─ mul-div.js
-│     ├─ mixed.js
-│     └─ find-x.js
-```
-
-### 2. File quan trọng
-
-- `data/grades.js`: cấu hình lớp 2, 3, 4, 5. Lớp 4 và lớp 5 đã để sẵn trạng thái chuẩn bị.
-- `data/lessons.js`: danh sách bài học theo cấu hình chuẩn, gồm `id`, `grade`, `title`, `topic`, `skill`, `level`, `generator`, `totalQuestions`, `config`.
-- `js/core/question-router.js`: nhận `lesson`, đọc `lesson.generator`, rồi gọi đúng module sinh câu hỏi.
-- `js/core/random.js`: hàm random dùng chung.
-- `js/core/answer-options.js`: sinh đáp án nhiễu gần đáp án đúng, không trùng, không âm nếu bài không cho phép.
-- `js/core/score.js`: chuẩn hóa tính điểm và dữ liệu kết quả trước khi lưu.
-- `js/generators/*.js`: mỗi dạng toán nằm trong một file riêng.
-- `js/practice.js`: chỉ còn xử lý luồng luyện tập, chấm bài, tổng kết, lưu Firestore và local fallback.
-- `js/firebase-config.js`: giữ nguyên cấu hình Firebase hiện tại.
-- `js/firebase-service.js`: giữ nguyên lớp giao tiếp Firestore theo đường dẫn `users/{uid}/sessions/{sessionId}`.
-
-### 3. Chức năng đã giữ nguyên
-
-- Đăng nhập/tạo tài khoản bằng Firebase Authentication.
-- Chặn trang học/lịch sử nếu chưa đăng nhập bằng `auth-guard.js`.
-- Luyện tập từng bài.
-- Âm thanh đúng/sai từ `assets/audio/dung.mp3` và `assets/audio/sai.mp3`.
-- Lưu lịch sử online Firestore theo `users/{uid}/sessions`.
-- Nếu Firebase lỗi, vẫn lưu localStorage dự phòng.
-- Chạy trực tiếp trên GitHub Pages, không dùng npm, không dùng framework, không cần build.
-
-### 4. Sau này muốn thêm dạng toán mới thì thêm ở đâu
-
-Ví dụ muốn thêm dạng phân số cho lớp 4:
-
-1. Tạo file mới:
-
-```text
-js/generators/fraction.js
-```
-
-2. File generator mới cần export hàm:
-
-```js
-export function generate(lesson) {
-  return {
-    questionText: "1/2 + 1/3",
-    answer: "5/6",
-    type: "fraction-add",
-    topic: "Phân số",
-    skill: "Cộng phân số",
-    explanation: "Quy đồng mẫu số rồi cộng tử số."
-  };
-}
-```
-
-3. Mở `js/core/question-router.js`, import generator mới và đăng ký:
-
-```js
-import { generate as generateFraction } from "../generators/fraction.js";
-
-const GENERATORS = {
-  "add-sub": generateAddSub,
-  "mul-div": generateMulDiv,
-  "mixed": generateMixed,
-  "find-x": generateFindX,
-  "fraction": generateFraction
-};
-```
-
-4. Nếu đáp án không phải số nguyên, bổ sung hàm tạo đáp án nhiễu tương ứng trong `js/core/answer-options.js`, ví dụ `createFractionOptions()`.
-
-### 5. Sau này muốn thêm bài mới thì sửa file nào
-
-Chỉ cần sửa:
-
-```text
-data/lessons.js
-```
-
-Ví dụ thêm bài lớp 4:
+### Dữ liệu câu sai hiện lưu gồm
+Mỗi câu sai được chuẩn hóa theo dạng:
 
 ```js
 {
-  id: "lop4-cong-so-lon",
-  grade: 4,
-  title: "Cộng số lớn",
-  topic: "Số tự nhiên",
-  skill: "Cộng số nhiều chữ số",
-  level: "easy",
-  generator: "add-sub",
-  totalQuestions: 10,
-  config: {
-    operators: ["+"],
-    min: 1000,
-    max: 100000,
-    allowNegative: false
-  }
+  questionText,
+  answer,
+  userAnswer,
+  lessonId,
+  lessonTitle,
+  grade,
+  topic,
+  skill,
+  level,
+  type,
+  explanation,
+  createdAt
 }
 ```
 
-Nếu `generator` đã có trong `question-router.js` thì không cần sửa thêm file nào khác.
+### LocalStorage keys được dùng
+- `lastWrongQuestions`: lưu câu sai của lượt học thường gần nhất.
+- `reviewWrongQuestions`: lưu tạm câu sai được chọn từ trang lịch sử trước khi chuyển sang `practice.html?review=session`.
+- `study_history_v1`: lịch sử dự phòng localStorage cũ, vẫn giữ nguyên.
+- `study_{lessonId}`: trạng thái tạm của lượt học thường.
+- `review_wrong_last`, `review_wrong_session`: trạng thái tạm của lượt ôn câu sai.
 
-### 6. Ghi chú triển khai
+### Session Firestore của chế độ ôn câu sai khác gì session thường?
+Session ôn câu sai vẫn lưu tại:
 
-- Upload toàn bộ thư mục `webhoctap1/` lên GitHub Pages.
-- Không cần cài đặt thư viện.
-- Không cần chạy lệnh build.
-- Nếu thay đổi Firebase, chỉ sửa `js/firebase-config.js`.
-
----
-
-## 2026-05-18 - Giai đoạn 2: Nâng cấp UI trang chủ theo luồng chọn bài
-
-### 1. Đã nâng UI trang chủ như thế nào
-
-Trang chủ `index.html` đã được đổi từ kiểu hiển thị toàn bộ bài học sang luồng 4 bước:
-
-```text
-Chọn lớp → Chọn chủ đề → Chọn mức độ → Bắt đầu học
+```txt
+users/{uid}/sessions/{sessionId}
 ```
 
-Điểm chính:
-
-- Không còn hiển thị tất cả bài học lẫn lộn trên trang chủ.
-- Lớp học lấy tự động từ `data/grades.js`.
-- Chủ đề lấy tự động từ trường `topic` trong `data/lessons.js`.
-- Mức độ lấy tự động từ trường `level` trong `data/lessons.js`.
-- Có trạng thái `active` khi đang chọn lớp/chủ đề/mức độ.
-- Có thông báo rõ khi lớp, chủ đề hoặc mức độ chưa có bài.
-- Lớp 4 và lớp 5 vẫn hiện trên giao diện, nếu chưa có bài sẽ báo “Sắp có bài mới”.
-- Nút “Xem lịch sử học tập” vẫn trỏ tới `history.html`.
-- Nút đăng xuất vẫn do `js/auth-guard.js` tự thêm vào header sau khi đăng nhập.
-
-### 2. File đã chỉnh sửa
-
-- `index.html`: dựng lại bố cục trang chủ thành 4 bước chọn bài.
-- `js/app.js`: viết lại theo hướng quản lý trạng thái chọn lớp/chủ đề/mức độ/bài học.
-- `css/style.css`: bổ sung CSS cho `grade-card`, `topic-card`, `level-card`, `lesson-card`, trạng thái `active` và `empty-state`.
-- `CHANGELOG.md`: cập nhật nội dung Giai đoạn 2.
-
-### 3. Các hàm chính trong `js/app.js`
-
-- `renderGrades()`: hiển thị danh sách lớp từ `data/grades.js`.
-- `renderTopics(selectedGrade)`: lọc và hiển thị chủ đề theo lớp đã chọn.
-- `renderLevels(selectedGrade, selectedTopic)`: lọc và hiển thị mức độ theo lớp/chủ đề.
-- `renderLessons(selectedGrade, selectedTopic, selectedLevel)`: lọc bài học và tạo nút “Bắt đầu học”.
-- `resetBelowStep(step)`: khi đổi lớp/chủ đề/mức độ thì reset các bước phía sau để tránh chọn nhầm.
-
-### 4. Cách thêm bài mới để hiện đúng lớp/chủ đề/mức độ
-
-Chỉ cần thêm object mới vào `data/lessons.js` theo cấu trúc chuẩn:
+Nhưng có thêm:
 
 ```js
-{
-  id: "lop4-cong-so-lon",
-  grade: 4,
-  title: "Cộng số lớn",
-  topic: "Số tự nhiên",
-  skill: "Cộng số nhiều chữ số",
-  level: "easy",
-  generator: "add-sub",
-  totalQuestions: 10,
-  config: {
-    operators: ["+"],
-    min: 1000,
-    max: 100000,
-    allowNegative: false
-  }
-}
+mode: "review-wrong",
+source: "last-session" // hoặc "history-session"
 ```
 
-Sau khi thêm:
+Session thường có:
 
-- Nếu `grade: 4`, bài sẽ tự xuất hiện khi chọn “Lớp 4”.
-- Nếu `topic: "Số tự nhiên"`, chủ đề “Số tự nhiên” sẽ tự hiện.
-- Nếu `level: "easy"`, mức “Dễ” sẽ tự hiện.
-- Nếu có nhiều bài cùng lớp/chủ đề/mức độ, trang chủ sẽ hiển thị danh sách để chọn.
-
-### 5. Quy ước level đang dùng
-
-```text
-easy      → Dễ
-medium    → Vừa
-hard      → Khó
-challenge → Thử thách
+```js
+mode: "normal"
 ```
 
-### 6. Chức năng được giữ nguyên
+### File đã chỉnh sửa chính
+- `js/practice.js`
+  - Thêm `initNormalPractice()`.
+  - Thêm `initWrongReview()`.
+  - Tách `loadNextQuestion()`, `handleAnswer()`, `finishSession()`, `saveLastWrongQuestions()`.
+- `js/storage.js`
+  - Thêm các hàm lưu/đọc câu sai gần nhất và câu sai từ lịch sử.
+- `js/core/score.js`
+  - Chuẩn hóa dữ liệu session và `wrongQuestions`.
+- `js/firebase-service.js`
+  - Lưu thêm `mode`, `source`, `topic`, `skill`, `generator`, `wrongQuestions`.
+- `js/history-online.js`
+  - Thêm nút ôn lại câu sai theo từng session.
+- `js/app.js`
+  - Hiển thị nút ôn câu sai gần nhất trên trang chủ.
+- `index.html`, `history.html`, `css/style.css`
+  - Bổ sung UI cho nút ôn câu sai.
 
-- Không thay đổi `practice.html`.
-- Không thay đổi logic sinh câu hỏi trong `js/core/` và `js/generators/`.
-- Không thay đổi đăng nhập Firebase Authentication.
-- Không thay đổi lưu lịch sử Firestore theo `users/{uid}/sessions/{sessionId}`.
-- Không thay đổi `history.html` và `history-online.js`.
-- Âm thanh đúng/sai vẫn dùng `assets/audio/dung.mp3` và `assets/audio/sai.mp3`.
-- Project vẫn chạy trực tiếp trên GitHub Pages, không cần npm, không framework, không build.
+### Sau này muốn mở rộng ôn câu sai theo chủ đề/kỹ năng thì sửa ở đâu?
+- Lọc dữ liệu câu sai theo `topic`, `skill`, `grade`, `level` tại `js/storage.js` hoặc `js/history-online.js`.
+- Thêm màn hình chọn nhóm câu sai ở `js/app.js`.
+- Nếu có phân số/số thập phân, mở rộng `js/core/answer-options.js` bằng các hàm như:
+  - `createFractionOptions()`
+  - `createDecimalOptions()`
+- Nếu muốn ôn câu sai lâu dài từ Firestore thay vì localStorage tạm, thêm hàm truy vấn theo session hoặc theo `wrongQuestions` trong `js/firebase-service.js`.
+
+## Giai đoạn 2 – Nâng UI trang chủ theo luồng chọn lớp → chủ đề → mức độ → bài học
+- Trang chủ không còn hiển thị tất cả bài lẫn lộn.
+- Dữ liệu lớp lấy từ `data/grades.js`.
+- Dữ liệu bài lấy từ `data/lessons.js`.
+- Chủ đề và mức độ được sinh động từ dữ liệu bài học.
+
+## Giai đoạn 1 – Tái cấu trúc module
+- Tách dữ liệu bài học, router sinh câu hỏi, core dùng chung và từng generator.
+- Giữ chạy trực tiếp trên GitHub Pages, không cần npm/framework/build.

@@ -24,6 +24,8 @@
       </div>
       <div class="home-actions">
         <a class="btn secondary" href="history.html">Xem lịch sử học tập</a>
+        <a class="btn review-home-btn hidden" id="reviewLastWrongBtn" href="practice.html?review=last">Ôn câu sai gần nhất</a>
+        <span class="review-home-empty" id="reviewLastWrongEmpty">Chưa có câu sai để ôn</span>
       </div>
     </section>
 
@@ -77,7 +79,8 @@
   <p class="footer-note">Có thể upload nguyên thư mục này lên GitHub Pages/Netlify là chạy.</p>
   <script src="data/grades.js"></script>
   <script src="data/lessons.js"></script>
-  <script src="js/app.js?v=20260518-homeflow"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/app.js?v=20260518-reviewwrong"></script>
   <script type="module" src="js/auth-guard.js?v=20260515b"></script>
 </body>
 </html>

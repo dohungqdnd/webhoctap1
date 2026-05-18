@@ -133,3 +133,12 @@ button:disabled{opacity:.65;cursor:not-allowed}
   .home-hero{grid-template-columns:1fr}.home-actions{justify-content:flex-start}.step-card{padding:14px;border-radius:20px}.step-head h3{font-size:21px}.choice-grid,.grade-grid,.topic-grid,.level-grid{grid-template-columns:1fr 1fr;gap:10px}.grade-card,.topic-card,.level-card{min-height:84px;padding:13px;border-radius:18px}.card-title{font-size:21px}.level-badge{font-size:18px}.lesson-pick-card{align-items:stretch;flex-direction:column}.start-btn{width:100%}
 }
 @media(max-width:420px){.choice-grid,.grade-grid,.topic-grid,.level-grid{grid-template-columns:1fr}}
+
+/* Giai đoạn 3: ôn câu sai */
+.review-home-btn{background:#12a150}
+.review-home-empty{display:inline-flex;align-items:center;min-height:46px;padding:10px 14px;border-radius:999px;background:#f8fcff;border:2px dashed #ccecf8;color:#607887;font-weight:800}
+.feedback.good{color:var(--good)}
+.review-session-btn{margin-top:12px;width:100%;font-weight:900}
+.review-list em{display:block;color:#607887;font-size:15px;margin-top:3px}
+.lesson-heading:has(+ .expression){line-height:1.25}
+@media(max-width:640px){.review-home-empty,.review-home-btn{width:100%;justify-content:center}.review-session-btn{font-size:16px}}

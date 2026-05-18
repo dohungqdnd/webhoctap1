@@ -9,7 +9,9 @@
     lessonList: document.getElementById('lessonList'),
     stepTopic: document.getElementById('stepTopic'),
     stepLevel: document.getElementById('stepLevel'),
-    stepLesson: document.getElementById('stepLesson')
+    stepLesson: document.getElementById('stepLesson'),
+    reviewLastWrongBtn: document.getElementById('reviewLastWrongBtn'),
+    reviewLastWrongEmpty: document.getElementById('reviewLastWrongEmpty')
   };
 
   const state = {
@@ -207,7 +209,19 @@
     });
   }
 
+  function renderLastWrongReviewEntry(){
+    if(!els.reviewLastWrongBtn || !els.reviewLastWrongEmpty || !window.StudyStorage) return;
+    const wrongQuestions = StudyStorage.getLastWrongQuestions();
+    const hasWrong = wrongQuestions.length > 0;
+    els.reviewLastWrongBtn.classList.toggle('hidden', !hasWrong);
+    els.reviewLastWrongEmpty.classList.toggle('hidden', hasWrong);
+    if(hasWrong){
+      els.reviewLastWrongBtn.textContent = `Ôn câu sai gần nhất (${wrongQuestions.length})`;
+    }
+  }
+
   function init(){
+    renderLastWrongReviewEntry();
     renderGrades();
     resetBelowStep(1);
 
@@ -227,6 +241,7 @@
     renderTopics,
     renderLevels,
     renderLessons,
-    resetBelowStep
+    resetBelowStep,
+    renderLastWrongReviewEntry
   };
 })();
