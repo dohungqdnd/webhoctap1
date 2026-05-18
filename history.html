@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Lịch sử học tập</title>
+  <title>Dashboard học tập của bé</title>
   <link rel="stylesheet" href="css/style.css" />
   <style>.auth-loading body{visibility:hidden}</style>
 </head>
@@ -11,23 +11,80 @@
   <header class="app-header">
     <img class="logo" src="assets/images/logo.jpg" alt="Logo" />
     <div>
-      <h1 class="brand-title">Lịch sử học tập</h1>
-      <p class="brand-subtitle">Phụ huynh xem lại quá trình ôn luyện của con</p>
+      <h1 class="brand-title">Dashboard học tập của bé</h1>
+      <p class="brand-subtitle">Phụ huynh theo dõi tiến bộ, chủ đề và kỹ năng cần ôn thêm</p>
+    </div>
+    <div class="user-bar">
+      <a class="btn secondary small-btn" href="index.html">← Về trang chủ</a>
+      <button class="btn secondary small-btn" id="logoutBtn" type="button">Đăng xuất</button>
     </div>
   </header>
 
-  <main class="container">
-    <div class="practice-top">
-      <a class="back-link" href="index.html">← Về trang chọn bài</a>
-      <span class="pill">Lịch sử online theo tài khoản đang đăng nhập</span>
-    </div>
+  <main class="container dashboard-container">
+    <section class="dashboard-card quick-insight" id="quickInsight">
+      <h2>Nhận định nhanh</h2>
+      <p>Đang tải dữ liệu học tập...</p>
+    </section>
 
-    <section class="summary-grid" id="summaryGrid"></section>
-    <section class="history-list" id="historyList"></section>
+    <section class="dashboard-card">
+      <div class="dashboard-section-head">
+        <div>
+          <h2>Tổng quan</h2>
+          <p>Dữ liệu lấy từ Firebase Firestore của tài khoản đang đăng nhập.</p>
+        </div>
+      </div>
+      <div class="overview-grid" id="overviewGrid"></div>
+    </section>
+
+    <section class="dashboard-card">
+      <div class="dashboard-section-head">
+        <div>
+          <h2>Bộ lọc</h2>
+          <p>Chọn khoảng thời gian, lớp hoặc chủ đề để xem kỹ hơn.</p>
+        </div>
+      </div>
+      <div class="filter-bar" id="filterBar">
+        <button class="filter-btn active" data-range="all" type="button">Tất cả</button>
+        <button class="filter-btn" data-range="7" type="button">7 ngày gần nhất</button>
+        <button class="filter-btn" data-range="30" type="button">30 ngày gần nhất</button>
+        <select id="gradeFilter" class="filter-select" aria-label="Lọc theo lớp"><option value="all">Tất cả lớp</option></select>
+        <select id="topicFilter" class="filter-select" aria-label="Lọc theo chủ đề"><option value="all">Tất cả chủ đề</option></select>
+      </div>
+    </section>
+
+    <section class="dashboard-card">
+      <div class="dashboard-section-head">
+        <div>
+          <h2>Phân tích theo chủ đề</h2>
+          <p>Mỗi thanh thể hiện tỷ lệ làm đúng của từng chủ đề.</p>
+        </div>
+      </div>
+      <div id="topicStats"></div>
+    </section>
+
+    <section class="dashboard-card">
+      <div class="dashboard-section-head">
+        <div>
+          <h2>Kỹ năng cần chú ý</h2>
+          <p>Ưu tiên kỹ năng có số câu sai nhiều nhất.</p>
+        </div>
+      </div>
+      <div id="skillStats"></div>
+    </section>
+
+    <section class="dashboard-card">
+      <div class="dashboard-section-head">
+        <div>
+          <h2>Lịch sử từng lượt học</h2>
+          <p>Vẫn giữ nút ôn lại câu sai theo từng lượt.</p>
+        </div>
+      </div>
+      <section class="history-list" id="historyList"></section>
+    </section>
   </main>
 
   <script type="module" src="js/auth-guard.js?v=20260515b"></script>
   <script src="js/storage.js"></script>
-  <script type="module" src="js/history-online.js?v=20260518-reviewwrong"></script>
+  <script type="module" src="js/history-online.js?v=20260519-dashboard"></script>
 </body>
 </html>

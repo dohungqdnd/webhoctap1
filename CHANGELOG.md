@@ -99,3 +99,102 @@ mode: "normal"
 ## Giai đoạn 1 – Tái cấu trúc module
 - Tách dữ liệu bài học, router sinh câu hỏi, core dùng chung và từng generator.
 - Giữ chạy trực tiếp trên GitHub Pages, không cần npm/framework/build.
+
+## Giai đoạn 4 - Nâng cấp `history.html` thành Dashboard phụ huynh
+
+### 1. Dashboard phụ huynh gồm những gì
+- Giữ nguyên file `history.html` để không phá link cũ, nhưng đổi tiêu đề thành **Dashboard học tập của bé**.
+- Thêm nút **Về trang chủ** và **Đăng xuất** ngay trên thanh đầu trang.
+- Dữ liệu được đọc online từ Firestore theo đường dẫn hiện có:
+  - `users/{uid}/sessions`
+- Nếu chưa có dữ liệu hoặc bộ lọc không có kết quả, trang hiển thị trạng thái rõ ràng thay vì báo lỗi.
+
+### 2. Các khối mới trên dashboard
+- **Nhận định nhanh**:
+  - Đánh giá chung theo tỷ lệ đúng trung bình.
+  - Gợi ý ôn thêm kỹ năng sai nhiều nhất.
+  - Nhắc duy trì 10 câu/ngày nếu số lượt học còn ít.
+- **Tổng quan**:
+  - Tổng số lượt học.
+  - Tổng số câu đã làm.
+  - Tỷ lệ đúng trung bình.
+  - Tổng số câu sai.
+  - Số ngày có học.
+  - Lượt học gần nhất.
+- **Phân tích theo chủ đề**:
+  - Tự động nhóm theo `topic`.
+  - Hiển thị số câu đã làm, đúng, sai, tỷ lệ đúng.
+  - Có thanh tiến độ bằng HTML/CSS, không dùng Chart.js.
+  - Nhận xét tự động:
+    - `>= 85%`: Làm tốt.
+    - `70–84%`: Khá ổn.
+    - `< 70%`: Cần ôn thêm.
+- **Kỹ năng cần chú ý**:
+  - Tự động nhóm từ `wrongQuestions` và `skill`.
+  - Sắp xếp kỹ năng sai nhiều nhất lên đầu.
+  - Hiển thị gợi ý: “Nên cho bé ôn thêm: ...”.
+- **Lịch sử từng lượt học**:
+  - Vẫn giữ ngày giờ, tên bài, chế độ học, đúng/tổng, phần trăm.
+  - Nếu lượt học có câu sai, vẫn có nút **Ôn lại câu sai của lượt này**.
+
+### 3. Dữ liệu được tổng hợp như thế nào
+- Dashboard đọc toàn bộ session online của tài khoản đang đăng nhập.
+- Mỗi session được chuẩn hóa để tương thích cả dữ liệu cũ và mới.
+- Nếu session thiếu `topic`, `skill`, `grade` thì hiển thị **Chưa phân loại** thay vì lỗi.
+- Tổng quan tính từ các trường:
+  - `total`
+  - `correct`
+  - `wrong`
+  - `percent`
+  - `createdAt` hoặc `finishedAt`
+- Chủ đề được tổng hợp theo `topic`.
+- Kỹ năng cần chú ý được tổng hợp ưu tiên từ `wrongQuestions[].skill`; nếu thiếu thì dùng `session.skill`.
+
+### 4. Bộ lọc mới
+- Bộ lọc thời gian:
+  - Tất cả.
+  - 7 ngày gần nhất.
+  - 30 ngày gần nhất.
+- Bộ lọc theo lớp.
+- Bộ lọc theo chủ đề.
+- Các bộ lọc chỉ ảnh hưởng dashboard và danh sách lịch sử, không ảnh hưởng dữ liệu Firestore.
+
+### 5. File đã chỉnh sửa
+- `history.html`
+  - Đổi giao diện lịch sử cũ thành dashboard phụ huynh.
+  - Thêm các vùng hiển thị: nhận định nhanh, tổng quan, bộ lọc, chủ đề, kỹ năng, lịch sử từng lượt.
+- `js/history-online.js`
+  - Viết lại theo các hàm rõ ràng:
+    - `loadSessions()`
+    - `applyFilters()`
+    - `calculateOverview()`
+    - `calculateTopicStats()`
+    - `calculateSkillStats()`
+    - `renderOverview()`
+    - `renderTopicStats()`
+    - `renderSkillStats()`
+    - `renderQuickInsight()`
+    - `renderSessionList()`
+  - Giữ chức năng ôn lại câu sai từ từng session.
+  - Thêm đăng xuất bằng Firebase Auth.
+- `css/style.css`
+  - Thêm style cho:
+    - `dashboard-card`
+    - `overview-grid`
+    - `stat-card`
+    - `progress-bar`
+    - `topic-table`
+    - `skill-warning`
+    - `quick-insight`
+    - `filter-bar`
+    - `session-card`
+
+### 6. Sau này muốn thêm biểu đồ thật / Chart.js thì thêm ở đâu
+- Nên thêm biểu đồ trong `history.html`, tại các vùng:
+  - Sau khối **Tổng quan** nếu muốn biểu đồ tiến bộ theo ngày.
+  - Trong khối **Phân tích theo chủ đề** nếu muốn biểu đồ cột/chữ nhật.
+- Logic xử lý dữ liệu nên đặt tiếp trong `js/history-online.js`, tách thêm hàm mới như:
+  - `calculateTrendStats()`
+  - `renderTrendChart()`
+  - `renderTopicChart()`
+- Nếu dùng Chart.js sau này, chỉ cần nhúng CDN trực tiếp trong HTML, không cần npm/build.

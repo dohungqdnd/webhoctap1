@@ -142,3 +142,46 @@ button:disabled{opacity:.65;cursor:not-allowed}
 .review-list em{display:block;color:#607887;font-size:15px;margin-top:3px}
 .lesson-heading:has(+ .expression){line-height:1.25}
 @media(max-width:640px){.review-home-empty,.review-home-btn{width:100%;justify-content:center}.review-session-btn{font-size:16px}}
+
+/* Giai đoạn 4: Dashboard phụ huynh */
+.dashboard-container{max-width:1120px}
+.dashboard-card{background:#fff;border:2px solid #e2f2fa;border-radius:24px;padding:18px;box-shadow:0 6px 18px rgba(0,76,115,.07);margin:16px 0}
+.dashboard-section-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}
+.dashboard-section-head h2,.quick-insight h2{margin:0;color:var(--primary-dark);font-size:24px}
+.dashboard-section-head p{margin:4px 0 0;color:#607887;line-height:1.4}
+.quick-insight{background:linear-gradient(180deg,#ffffff 0%,#f4fbff 100%);border-color:#ccecf8}
+.quick-insight p{font-size:18px;line-height:1.55;margin:8px 0 0}
+.quick-insight ul{margin:10px 0 0;padding-left:22px;font-size:18px;line-height:1.6}
+.overview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.stat-card{background:#f8fcff;border:2px solid #d7eef8;border-radius:20px;padding:16px;text-align:center;min-height:112px;display:flex;flex-direction:column;justify-content:center}
+.stat-number{font-size:34px;font-weight:900;color:var(--primary-dark);line-height:1.15}
+.stat-number.small{font-size:17px;line-height:1.35}
+.stat-label{font-size:14px;color:#607887;margin-top:7px;font-weight:700}
+.filter-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.filter-btn,.filter-select{min-height:46px;border:2px solid #ccecf8;border-radius:999px;background:#f8fcff;color:var(--primary-dark);padding:9px 14px;font-size:16px;font-weight:800;font-family:inherit;cursor:pointer}
+.filter-btn.active{background:var(--primary);border-color:var(--primary);color:#fff;box-shadow:0 5px 14px rgba(0,119,182,.18)}
+.filter-select{border-radius:16px;min-width:150px;cursor:pointer}
+.topic-table{display:grid;gap:10px}
+.topic-row{display:grid;grid-template-columns:minmax(160px,1.1fr) minmax(180px,1fr) 120px;gap:12px;align-items:center;background:#f8fcff;border:2px solid #e2f2fa;border-radius:18px;padding:12px}
+.topic-name strong{display:block;color:var(--primary-dark);font-size:18px}
+.topic-name span{display:block;color:#607887;font-size:14px;margin-top:3px}
+.progress-wrap{display:grid;grid-template-columns:1fr 48px;gap:10px;align-items:center}
+.progress-bar{height:16px;border-radius:999px;background:#eaf7ff;border:1px solid #ccecf8;overflow:hidden}
+.progress-bar span{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#8dd8f8,#0077b6)}
+.progress-wrap b{color:var(--primary-dark);font-size:16px;text-align:right}
+.topic-comment{font-weight:900;text-align:center;border-radius:999px;padding:8px 10px;font-size:14px}
+.topic-comment.good{background:#e9fff0;color:#116b34;border:1px solid #bfead0}
+.topic-comment.ok{background:#fff7df;color:#7a5600;border:1px solid #ffe19a}
+.topic-comment.need{background:#fff1ed;color:#9d2c10;border:1px solid #ffc7b8}
+.skill-warning{background:#fff7df;border:2px solid #ffe19a;color:#7a5600;border-radius:18px;padding:13px 14px;font-size:17px;margin-bottom:12px;line-height:1.45}
+.skill-list{display:grid;gap:10px}
+.skill-item{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#f8fcff;border:2px solid #e2f2fa;border-radius:18px;padding:12px}
+.skill-item strong{display:block;color:var(--primary-dark);font-size:18px}
+.skill-item span{display:block;color:#607887;font-size:14px;margin-top:3px}
+.skill-rate{font-weight:900;color:#c83911;background:#fff1ed;border:1px solid #ffc7b8;border-radius:999px;padding:8px 10px;white-space:nowrap}
+.session-card{box-shadow:none}
+.session-meta{font-size:14px!important;color:#607887!important;margin-top:4px!important}
+.dashboard-card .history-list{margin-top:0}
+@media(max-width:760px){
+  .topic-row{grid-template-columns:1fr;gap:8px}.topic-comment{text-align:left;width:max-content}.progress-wrap{grid-template-columns:1fr 44px}.filter-btn,.filter-select{width:100%;border-radius:16px}.dashboard-section-head{display:block}.stat-number{font-size:28px}.quick-insight ul{font-size:16px}.skill-item{align-items:flex-start;flex-direction:column}.skill-rate{align-self:flex-start}
+}
