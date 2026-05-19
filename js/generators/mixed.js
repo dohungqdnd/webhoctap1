@@ -74,3 +74,72 @@ function build(lesson, questionText, answer, type, skill, explanation) {
     explanation
   };
 }
+
+function generateMulDivCombined(config) {
+  const MAX_RETRY = 100;
+
+  for (let i = 0; i < MAX_RETRY; i++) {
+    const form = pickOne(config.forms);
+
+    // ===== DẠNG a × b : c =====
+    if (form === "mul-div") {
+      const a = randomInt(2, 10);
+      const b = randomInt(2, 10);
+      const c = randomInt(2, 10);
+
+      const product = a * b;
+
+      if (product % c !== 0) continue;
+
+      const result = product / c;
+
+      if (config.resultMax && result > config.resultMax) continue;
+      if (config.resultMin && result < config.resultMin) continue;
+
+      return {
+        questionText: `${a} × ${b} : ${c} = ?`,
+        answer: result,
+        type: "mul-div-combined",
+        topic: "Tổng hợp",
+        skill: "Nhân chia kết hợp",
+        explanation: ""
+      };
+    }
+
+    // ===== DẠNG a : b × c =====
+    if (form === "div-mul") {
+      const b = randomInt(2, 10);
+      const quotientTarget = randomInt(
+        config.divFirstQuotientMin || 1,
+        config.divFirstQuotientMax || 9
+      );
+
+      const a = b * quotientTarget;
+
+      const c = randomInt(1, config.multiplierMax || 9);
+
+      const finalResult = quotientTarget * c;
+
+      if (config.finalResultMax && finalResult > config.finalResultMax) continue;
+
+      return {
+        questionText: `${a} : ${b} × ${c} = ?`,
+        answer: finalResult,
+        type: "mul-div-combined",
+        topic: "Tổng hợp",
+        skill: "Nhân chia kết hợp",
+        explanation: ""
+      };
+    }
+  }
+
+  // fallback an toàn
+  return {
+    questionText: "2 × 3 : 1 = ?",
+    answer: 6,
+    type: "mul-div-combined",
+    topic: "Tổng hợp",
+    skill: "Nhân chia kết hợp",
+    explanation: ""
+  };
+}
