@@ -67,6 +67,44 @@ globalThis.LESSONS = [
     totalQuestions: 10,
     config: { mode: "mul-div", operators: ["*", "/"], tables: [2, 3, 4, 5], min: 1, max: 10, allowRemainder: false }
   },
+{
+  id: "lop2-tong-hop-nhan-chia-vua",
+  grade: 2,
+  title: "Tổng hợp nhân chia - mức vừa",
+  topic: "Tổng hợp",
+  skill: "Nhân chia kết hợp",
+  level: "medium",
+  generator: "mixed",
+  totalQuestions: 10,
+  config: {
+    type: "mul-div-combined",
+    forms: ["mul-div", "div-mul"],
+    resultMax: 10,
+    divFirstQuotientMax: 9,
+    multiplierMax: 9,
+    finalResultMax: 100
+  }
+},
+{
+  id: "lop2-tong-hop-nhan-chia-kho",
+  grade: 2,
+  title: "Tổng hợp nhân chia - mức khó",
+  topic: "Tổng hợp",
+  skill: "Nhân chia kết hợp",
+  level: "hard",
+  generator: "mixed",
+  totalQuestions: 10,
+  config: {
+    type: "mul-div-combined",
+    forms: ["mul-div", "div-mul"],
+    resultMin: 11,
+    divFirstQuotientMin: 11,
+    divFirstQuotientMax: 99,
+    multiplierMax: 9,
+    finalResultMax: 100
+  }
+},
+  
   {
     id: "lop3-cong1000",
     grade: 3,
