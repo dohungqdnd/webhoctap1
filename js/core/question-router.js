@@ -25,10 +25,3 @@ export function generateQuestion(lesson) {
 export function listGenerators() {
   return Object.keys(GENERATORS);
 }
-if (lesson.generator === "mixed") {
-  if (lesson.config && lesson.config.type === "mul-div-combined") {
-    return generateMulDivCombined(lesson.config);
-  }
-
-  // giữ các logic cũ bên dưới
-}

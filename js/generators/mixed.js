@@ -2,6 +2,8 @@ import { randomInt, pickOne } from "../core/random.js";
 
 export function generate(lesson) {
   const config = lesson.config || {};
+  if (config.type === "mul-div-combined") return generateMulDivCombined(lesson);
+
   const mode = config.mode || "all";
   if (mode === "add-sub") return generateAddSub(lesson);
   if (mode === "mul-div") return generateMulDiv(lesson);
@@ -26,6 +28,78 @@ function generateMulDiv(lesson) {
   const a = randomInt(1, 10) * c;
   const answer = (a * b) / c;
   return build(lesson, `${a} × ${b} : ${c}`, answer, "mixed-mul-div", "Nhân + Chia", `Tính nhân trước rồi chia: ${a} × ${b} : ${c} = ${answer}.`);
+}
+
+function generateMulDivCombined(lesson) {
+  const config = lesson.config || {};
+  const forms = Array.isArray(config.forms) && config.forms.length ? config.forms : ["mul-div", "div-mul"];
+  const maxRetry = Number(config.maxRetry || 150);
+
+  for (let i = 0; i < maxRetry; i += 1) {
+    const form = pickOne(forms);
+    const question = form === "div-mul"
+      ? tryBuildDivMulQuestion(lesson, config)
+      : tryBuildMulDivQuestion(lesson, config);
+
+    if (question) return question;
+  }
+
+  return build(
+    lesson,
+    "6 × 5 : 3",
+    10,
+    "mul-div-combined",
+    "Nhân chia kết hợp",
+    "Tính lần lượt từ trái sang phải: 6 × 5 : 3 = 10."
+  );
+}
+
+function tryBuildMulDivQuestion(lesson, config) {
+  const a = randomInt(2, 10);
+  const b = randomInt(2, 10);
+  const c = randomInt(2, 10);
+  const product = a * b;
+
+  if (product % c !== 0) return null;
+
+  const answer = product / c;
+  if (config.resultMax && answer > config.resultMax) return null;
+  if (config.resultMin && answer < config.resultMin) return null;
+  if (config.finalResultMax && answer > config.finalResultMax) return null;
+
+  return build(
+    lesson,
+    `${a} × ${b} : ${c}`,
+    answer,
+    "mul-div-combined",
+    "Nhân chia kết hợp",
+    `Tính lần lượt từ trái sang phải: ${a} × ${b} : ${c} = ${answer}.`
+  );
+}
+
+function tryBuildDivMulQuestion(lesson, config) {
+  const quotientMin = Number(config.divFirstQuotientMin || 1);
+  const quotientMax = Number(config.divFirstQuotientMax || 9);
+  const multiplierMax = Number(config.multiplierMax || 9);
+
+  if (quotientMin > quotientMax) return null;
+
+  const b = randomInt(2, 10);
+  const quotient = randomInt(quotientMin, quotientMax);
+  const a = b * quotient;
+  const c = randomInt(1, multiplierMax);
+  const answer = quotient * c;
+
+  if (config.finalResultMax && answer > config.finalResultMax) return null;
+
+  return build(
+    lesson,
+    `${a} : ${b} × ${c}`,
+    answer,
+    "mul-div-combined",
+    "Nhân chia kết hợp",
+    `Tính lần lượt từ trái sang phải: ${a} : ${b} × ${c} = ${answer}.`
+  );
 }
 
 function generateAll(lesson) {
@@ -72,74 +146,5 @@ function build(lesson, questionText, answer, type, skill, explanation) {
     topic: lesson.topic || "Tổng hợp",
     skill: lesson.skill || skill,
     explanation
-  };
-}
-
-function generateMulDivCombined(config) {
-  const MAX_RETRY = 100;
-
-  for (let i = 0; i < MAX_RETRY; i++) {
-    const form = pickOne(config.forms);
-
-    // ===== DẠNG a × b : c =====
-    if (form === "mul-div") {
-      const a = randomInt(2, 10);
-      const b = randomInt(2, 10);
-      const c = randomInt(2, 10);
-
-      const product = a * b;
-
-      if (product % c !== 0) continue;
-
-      const result = product / c;
-
-      if (config.resultMax && result > config.resultMax) continue;
-      if (config.resultMin && result < config.resultMin) continue;
-
-      return {
-        questionText: `${a} × ${b} : ${c} = ?`,
-        answer: result,
-        type: "mul-div-combined",
-        topic: "Tổng hợp",
-        skill: "Nhân chia kết hợp",
-        explanation: ""
-      };
-    }
-
-    // ===== DẠNG a : b × c =====
-    if (form === "div-mul") {
-      const b = randomInt(2, 10);
-      const quotientTarget = randomInt(
-        config.divFirstQuotientMin || 1,
-        config.divFirstQuotientMax || 9
-      );
-
-      const a = b * quotientTarget;
-
-      const c = randomInt(1, config.multiplierMax || 9);
-
-      const finalResult = quotientTarget * c;
-
-      if (config.finalResultMax && finalResult > config.finalResultMax) continue;
-
-      return {
-        questionText: `${a} : ${b} × ${c} = ?`,
-        answer: finalResult,
-        type: "mul-div-combined",
-        topic: "Tổng hợp",
-        skill: "Nhân chia kết hợp",
-        explanation: ""
-      };
-    }
-  }
-
-  // fallback an toàn
-  return {
-    questionText: "2 × 3 : 1 = ?",
-    answer: 6,
-    type: "mul-div-combined",
-    topic: "Tổng hợp",
-    skill: "Nhân chia kết hợp",
-    explanation: ""
   };
 }

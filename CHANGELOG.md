@@ -198,3 +198,27 @@ mode: "normal"
   - `renderTrendChart()`
   - `renderTopicChart()`
 - Nếu dùng Chart.js sau này, chỉ cần nhúng CDN trực tiếp trong HTML, không cần npm/build.
+
+
+## Cập nhật bổ sung: Bài Tổng hợp nhân chia lớp 2
+
+### Nội dung đã thêm
+- Thêm 2 bài mới trong `data/lessons.js`:
+  - `lop2-tong-hop-nhan-chia-vua`: Tổng hợp nhân chia - mức vừa.
+  - `lop2-tong-hop-nhan-chia-kho`: Tổng hợp nhân chia - mức khó.
+- Nâng cấp `js/generators/mixed.js` để hỗ trợ `config.type = "mul-div-combined"`.
+- Dạng bài mới sinh theo 2 mẫu:
+  - `a × b : c`
+  - `a : b × c`
+
+### Quy tắc mức vừa
+- Với dạng `a × b : c`: kết quả cuối không lớn hơn 10.
+- Với dạng `a : b × c`: kết quả phép chia đầu tiên nhỏ hơn hoặc bằng 9, số nhân tiếp theo không lớn hơn 9, kết quả cuối không quá 100.
+
+### Quy tắc mức khó
+- Với dạng `a × b : c`: kết quả cuối từ 11 trở lên.
+- Với dạng `a : b × c`: kết quả phép chia đầu tiên từ 11 đến 99, số nhân tiếp theo không lớn hơn 9, kết quả cuối không quá 100.
+
+### Ghi chú mở rộng
+- Muốn chỉnh độ khó chỉ cần sửa `config` của lesson trong `data/lessons.js`.
+- Không cần sửa `practice.js`, `history-online.js`, Firebase hoặc luồng lưu Firestore.
